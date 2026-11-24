@@ -1,0 +1,360 @@
+{
+  "benchmark": "rag",
+  "queries": 20,
+  "recall@3": 0.9,
+  "recall@5": 0.9,
+  "ndcg@3": 0.7917,
+  "ndcg@5": 0.8316,
+  "search_latency_ms": {
+    "n": 20,
+    "mean": 146.59,
+    "p50": 140.18,
+    "p95": 162.62,
+    "min": 123.86,
+    "max": 284.9
+  },
+  "target_recall": 0.85,
+  "passed": true,
+  "rows": [
+    {
+      "query": "How do horizontal scaling, database sharding, and consistent hashing improve availability in distributed systems?",
+      "relevance": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "top_sources": [
+        "mongo\\src\\mongo\\db\\shard_role\\shard_catalog\\README_sharding_catalog.md",
+        "developer-roadmap\\src\\data\\roadmaps\\system-design\\content\\sharding@R6YehzA3X6DDo6oGBoBAx.md",
+        "coding-interview-university\\translations\\README-af.md",
+        "developer-roadmap\\src\\data\\roadmaps\\mongodb\\content\\sharded-clusters@CijW3HCjVRZHQIBsQ9_0H.md",
+        "developer-roadmap\\src\\data\\roadmaps\\mongodb\\content\\scaling-mongodb@cOKQQ7SaiawWF49MdCGTh.md"
+      ]
+    },
+    {
+      "query": "What is the CAP theorem and how do eventual consistency and strong consistency trade off during network partitions?",
+      "relevance": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "top_sources": [
+        "developer-roadmap\\src\\data\\roadmaps\\system-design\\content\\cap-theorem@tcGdVQsCEobdV9hgOq3eG.md",
+        "developer-roadmap\\src\\data\\roadmaps\\computer-science\\content\\cap-theorem@GZI8EsEqiMJX3fSbO_E-7.md",
+        "developer-roadmap\\src\\data\\roadmaps\\data-engineer\\content\\cap-theorem@AslPFjoakcC44CmPB5nuw.md",
+        "developer-roadmap\\src\\data\\question-groups\\backend\\content\\cap-theorem.md",
+        "developer-roadmap\\src\\data\\roadmaps\\backend\\content\\cap-theorem@LAdKDJ4LcMaDWqslMvE8X.md"
+      ]
+    },
+    {
+      "query": "How do Kubernetes Pods, Deployments, ReplicaSets, and Services manage container orchestration and rolling updates?",
+      "relevance": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "top_sources": [
+        "kubernetes\\CHANGELOG\\CHANGELOG-1.2.md",
+        "developer-roadmap\\src\\data\\roadmaps\\docker\\content\\kubernetes@RqXpX2XabtHYVjgg1EZR_.md",
+        "developer-roadmap\\src\\data\\roadmaps\\docker\\content\\kubernetes@RqXpX2XabtHYVjgg1EZR_.md",
+        "developer-roadmap\\src\\data\\question-groups\\devops\\content\\what-is-helm-chart.md",
+        "developer-roadmap\\src\\data\\roadmaps\\devops\\content\\fluxcd@6gVV_JUgKgwJb4C8tHZn7.md"
+      ]
+    },
+    {
+      "query": "How does FastAPI use Pydantic models, dependency injection, and ASGI async endpoints for request validation?",
+      "relevance": [
+        0,
+        1,
+        1,
+        1,
+        1
+      ],
+      "top_sources": [
+        "developer-roadmap\\src\\data\\roadmaps\\python\\content\\fast-api@XeQSmvAsGSTi8dd7QVHxn.md",
+        "fastapi\\docs\\en\\docs\\tutorial\\server-sent-events.md",
+        "fastapi\\fastapi\\.agents\\skills\\fastapi\\SKILL.md",
+        "fastapi\\docs\\en\\docs\\release-notes.md",
+        "fastapi\\docs\\en\\docs\\tutorial\\stream-json-lines.md"
+      ]
+    },
+    {
+      "query": "How does Django ORM handle QuerySets, database migrations, and middleware in the request-response lifecycle?",
+      "relevance": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "top_sources": [
+        "developer-roadmap\\src\\data\\roadmaps\\django\\content\\django-orm@GQqNJQ3FkO-kBM8WYVBmn.md",
+        "django\\docs\\ref\\databases.txt",
+        "django\\docs\\releases\\1.8.txt",
+        "developer-roadmap\\src\\data\\roadmaps\\django\\content\\raw-sql@7rCNwoQW2lI7xxMUP_ESa.md",
+        "developer-roadmap\\src\\data\\roadmaps\\django\\content\\querying-data@8ud6LNbixJEP1It9AUMB7.md"
+      ]
+    },
+    {
+      "query": "How do Flask Blueprints, application context, and Jinja2 templates structure modular web applications?",
+      "relevance": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "top_sources": [
+        "flask\\docs\\templating.rst",
+        "flask\\docs\\blueprints.rst",
+        "flask\\docs\\templating.rst",
+        "flask\\docs\\blueprints.rst",
+        "flask\\docs\\blueprints.rst"
+      ]
+    },
+    {
+      "query": "How does PostgreSQL MVCC concurrency control work with transactions, vacuuming, and B-tree indexes?",
+      "relevance": [
+        1,
+        1,
+        1,
+        1,
+        0
+      ],
+      "top_sources": [
+        "developer-roadmap\\src\\data\\roadmaps\\postgresql-dba\\content\\mvcc@-_ADJsTVGAgXq7_-8bdIO.md",
+        "developer-roadmap\\src\\data\\roadmaps\\postgresql-dba\\content\\vacuum-processing@dJzJP1uo4kVFThWgglPfk.md",
+        "django\\docs\\ref\\contrib\\postgres\\operations.txt",
+        "developer-roadmap\\src\\data\\roadmaps\\postgresql-dba\\content\\oltp@VekAMpcrugHGuvSbyPZVv.md",
+        "developer-roadmap\\src\\data\\roadmaps\\data-engineer\\content\\oltp-vs-olap@-VQQmIUGesnrT1N6kH5et.md"
+      ]
+    },
+    {
+      "query": "How does Redis persistence work using RDB snapshots and Append Only File (AOF) logging alongside eviction policies?",
+      "relevance": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "top_sources": [
+        "developer-roadmap\\src\\data\\roadmaps\\redis\\content\\hybrid-persistence@S5Y26m1oHCQpB-oLCdtac.md",
+        "developer-roadmap\\src\\data\\roadmaps\\redis\\content\\how-aof-works@PTj6oxvpw8vP295WvAI80.md",
+        "developer-roadmap\\src\\data\\roadmaps\\redis\\content\\persistence-options@bQaek7f3dAaZfSUhwovm1.md",
+        "developer-roadmap\\src\\data\\roadmaps\\redis\\content\\rdb-vs-aof-tradeoffs@3S-qqOlfr60HR4VvDr4He.md",
+        "developer-roadmap\\src\\data\\roadmaps\\redis\\content\\data-persistence-options@8uRpPJ0iD4XnQPKruQc8P.md"
+      ]
+    },
+    {
+      "query": "How do Docker containers use namespaces, cgroups, and layered overlay filesystems for process isolation?",
+      "relevance": [
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "top_sources": [
+        "developer-roadmap\\src\\data\\roadmaps\\docker\\content\\underlying-technologies@jrH1qE6EnFXL4fTyYU8gR.md",
+        "docker-ce\\components\\cli\\docs\\reference\\run.md",
+        "developer-roadmap\\src\\data\\roadmaps\\docker\\content\\namespaces@BvV8VCX39wRB-g8WvGF1g.md",
+        "developer-roadmap\\src\\data\\roadmaps\\docker\\content\\cgroups@fRl4EfNwlBiidzn3IV34-.md",
+        "developer-roadmap\\src\\data\\roadmaps\\software-architect\\content\\containers@l3oeo65FyV5HHvw5n_1wa.md"
+      ]
+    },
+    {
+      "query": "How does Terraform manage infrastructure as code using state files, providers, plan, and apply workflows?",
+      "relevance": [
+        1,
+        0,
+        0,
+        1,
+        1
+      ],
+      "top_sources": [
+        "developer-roadmap\\src\\data\\roadmaps\\mlops\\content\\terraform@dA9AE-3lTB6lN-X-_Byd2.md",
+        "developer-roadmap\\src\\data\\question-groups\\devops\\content\\iac-concept.md",
+        "developer-roadmap\\src\\data\\roadmaps\\mlops\\content\\infrastructure-as-code@sf67bSL7HAx6iN7S6MYKs.md",
+        "developer-roadmap\\src\\data\\roadmaps\\data-engineer\\content\\terraform@N-xRhdOTHijAymcTWPXPJ.md",
+        "developer-roadmap\\src\\data\\roadmaps\\devops\\content\\terraform@nUBGf1rp9GK_pbagWCP9g.md"
+      ]
+    },
+    {
+      "query": "How does Ansible execute idempotent playbooks over SSH using inventory files, roles, and Jinja2 templates?",
+      "relevance": [
+        1,
+        0,
+        1,
+        1,
+        1
+      ],
+      "top_sources": [
+        "developer-roadmap\\src\\data\\roadmaps\\devops\\content\\ansible@h9vVPOmdUSeEGVQQaSTH5.md",
+        "developer-roadmap\\src\\data\\projects\\configuration-management.md",
+        "ansible\\AGENTS.md",
+        "ansible\\.ipynb_checkpoints\\AGENTS-checkpoint.md",
+        "developer-roadmap\\src\\data\\roadmaps\\mlops\\content\\ansible@-_obgPIUaZ4BVpg29xG_9.md"
+      ]
+    },
+    {
+      "query": "How does PyTorch autograd compute gradients dynamically with computational graphs and DistributedDataParallel?",
+      "relevance": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "top_sources": [
+        "pytorch\\docs\\source\\rpc\\distributed_autograd.rst",
+        "pytorch\\docs\\source\\rpc\\distributed_autograd.rst",
+        "pytorch\\docs\\source\\rpc\\distributed_autograd.rst",
+        "pytorch\\docs\\source\\rpc\\distributed_autograd.rst",
+        "pytorch\\docs\\source\\rpc.md"
+      ]
+    },
+    {
+      "query": "How does Hugging Face Transformers use AutoTokenizer, AutoModel, and attention masks for sequence classification?",
+      "relevance": [
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      "top_sources": [
+        "transformers\\docs\\source\\en\\model_doc\\roberta-prelayernorm.md",
+        "transformers\\docs\\source\\en\\model_doc\\seed_oss.md",
+        "transformers\\docs\\source\\en\\model_doc\\aimv2.md",
+        "developer-roadmap\\src\\data\\roadmaps\\ai-engineer\\content\\hugging-face@v99C5Bml2a6148LCJ9gy9.md",
+        "transformers\\docs\\source\\en\\model_doc\\encoder-decoder.md"
+      ]
+    },
+    {
+      "query": "How does LangChain compose prompts, retrievers, and output parsers in a retrieval-augmented generation pipeline?",
+      "relevance": [
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "top_sources": [
+        "developer-roadmap\\src\\data\\roadmaps\\ai-engineer\\content\\chunking@mX987wiZF7p3V_gExrPeX.md",
+        "developer-roadmap\\src\\data\\roadmaps\\ai-engineer\\content\\what-are-rags@lVhWhZGR558O-ljHobxIi.md",
+        "developer-roadmap\\src\\data\\roadmaps\\ai-engineer\\content\\langchain@jM-Jbo0wUilhVY830hetJ.md",
+        "transformers\\docs\\source\\en\\assisted_decoding.md",
+        "developer-roadmap\\src\\data\\roadmaps\\ai-engineer\\content\\structured-output@zqhmLzHsmDlrTFVHzhq6-.md"
+      ]
+    },
+    {
+      "query": "How does Rust enforce memory safety at compile time using ownership, borrowing, and lifetime annotations?",
+      "relevance": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "top_sources": [
+        "developer-roadmap\\src\\data\\roadmaps\\rust\\content\\ownership-rules--memory-safety@2UQ3AuGkDbT0-54l0rOGM.md",
+        "developer-roadmap\\src\\data\\roadmaps\\rust\\content\\ownsership-rules--memory-safety@2UQ3AuGkDbT0-54l0rOGM.md",
+        "developer-roadmap\\src\\data\\roadmaps\\rust\\content\\lifetimes--borrow-checker@UZ56NKloehcxUFNuSeO19.md",
+        "rust\\src\\doc\\rustc\\src\\exploit-mitigations.md",
+        "rust\\src\\doc\\rustc\\src\\exploit-mitigations.md"
+      ]
+    },
+    {
+      "query": "How do Go goroutines, channels, and the select statement coordinate concurrent execution without shared memory locks?",
+      "relevance": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "top_sources": [
+        "developer-roadmap\\src\\data\\question-groups\\golang\\content\\concurrency-model.md",
+        "developer-roadmap\\src\\data\\roadmaps\\golang\\content\\goroutines@08QOxnF3rKEDekrkX7w1j.md",
+        "developer-roadmap\\src\\data\\question-groups\\golang\\content\\concurrency-management.md",
+        "developer-roadmap\\src\\data\\question-groups\\golang\\content\\goroutine-scheduling.md",
+        "developer-roadmap\\src\\data\\roadmaps\\golang\\content\\channels@EgXagvLpJkXUI2od5K1FD.md"
+      ]
+    },
+    {
+      "query": "How does CPython manage memory using reference counting, cyclic garbage collection, and the Global Interpreter Lock (GIL)?",
+      "relevance": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "top_sources": [
+        "cpython\\Doc\\faq\\design.rst",
+        "cpython\\InternalDocs\\garbage_collector.md",
+        "cpython\\InternalDocs\\qsbr.md",
+        "cpython\\Doc\\glossary.rst",
+        "cpython\\InternalDocs\\garbage_collector.md"
+      ]
+    },
+    {
+      "query": "How does Apache Spark execute RDD transformations lazily using DAG scheduling and shuffle partitions?",
+      "relevance": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "top_sources": [
+        "spark\\docs\\rdd-programming-guide.md",
+        "spark\\docs\\rdd-programming-guide.md",
+        "spark\\docs\\rdd-programming-guide.md",
+        "spark\\docs\\rdd-programming-guide.md",
+        "spark\\docs\\rdd-programming-guide.md"
+      ]
+    },
+    {
+      "query": "How does Elasticsearch index inverted documents across shards and replicas for full-text search scoring?",
+      "relevance": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "top_sources": [
+        "elasticsearch\\docs\\reference\\elasticsearch\\mapping-reference\\doc-values.md",
+        "developer-roadmap\\src\\data\\roadmaps\\elasticsearch\\content\\bm25-algorithm@MqoJJv_aZCdCLHLpebrPA.md",
+        "developer-roadmap\\src\\data\\roadmaps\\elasticsearch\\content\\doc-values@rkL_k2nxymtgPW8xf_04k.md",
+        "developer-roadmap\\src\\data\\roadmaps\\elasticsearch\\content\\primary-shards@nkqoh4_V4VRyETqN0ci1R.md",
+        "elasticsearch\\docs\\reference\\query-languages\\sql\\sql-functions-search.md"
+      ]
+    },
+    {
+      "query": "What are the best practices for behavioral interviews, STAR method answers, and coding interview preparation?",
+      "relevance": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "top_sources": [
+        "tech-interview-handbook\\apps\\website\\contents\\behavioral-interview.md",
+        "tech-interview-handbook\\apps\\website\\contents\\software-engineering-interview-guide.md",
+        "tech-interview-handbook\\apps\\website\\contents\\coding-interview-prep.md",
+        "tech-interview-handbook\\apps\\website\\contents\\coding-interview-prep.md",
+        "tech-interview-handbook\\apps\\website\\contents\\coding-interview-prep.md"
+      ]
+    }
+  ]
+}
