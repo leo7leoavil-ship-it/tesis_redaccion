@@ -1,14 +1,14 @@
 # CAPÍTULO IV. RESULTADOS
 
 > **Estado del documento:**  
-> - **Sección `4.1 Implementación del sistema`:** Redactada al 100 % con base en la especificación real de `tech-tutor-engine` v1.0.0 (`Documentos_tecnicos/`).  
+> - **Sección `4.1 Implementación del sistema`:** Redactada al 100 % con base en la especificación real de `hemi-core v1.0.0` (`Documentos_tecnicos/`).  
 > - **Sección `4.2 Resultados de pruebas`:** Incluye los resultados verificados de la suite automatizada (`72` pruebas en `pytest`) y **tablas estructuradas con marcadores `[PENDIENTE DE MEDICIÓN REAL]`** listas para vaciar los resultados de `tests/benchmark_thesis.py` y de las pruebas piloto con usuarios en los endpoints.
 
 ---
 
-## 4.1 Implementación del sistema (`tech-tutor-engine` v1.0.0)
+## 4.1 Implementación del sistema (`hemi-core v1.0.0`)
 
-Se implementó exitosamente el motor de inferencia y evaluación técnica **`tech-tutor-engine` v1.0.0** bajo una arquitectura desacoplada *Model-as-a-Service* (MaaS) construida sobre `FastAPI` y `Uvicorn` (`app/main.py`). La solución organiza la lógica de negocio en capas separadas de configuración y seguridad (`app/core/`), contratos de datos (`app/schemas/`), enrutamiento v1 (`app/api/v1/`) y servicios de inteligencia artificial (`app/services/`).
+Se implementó exitosamente el motor de diagnóstico desacoplado **`hemi-core` (`v1.0.0`)**, núcleo del ecosistema **Hemi**, bajo una arquitectura *Model-as-a-Service* (MaaS) construida sobre `FastAPI` y `Uvicorn` (`app/main.py`). La solución organiza la lógica de negocio en capas separadas de configuración y seguridad (`app/core/`), contratos de datos (`app/schemas/`), enrutamiento v1 (`app/api/v1/`) y servicios de inteligencia artificial (`app/services/`).
 
 ### 4.1.1 Orquestación del flujo multimodal asíncrono
 
@@ -23,12 +23,23 @@ Implementado en `app/services/asr_service.py` bajo un patrón *Singleton* con im
 * **Protección de recursos y cancelación cooperativa:** Valida límites estrictos de **`5 MB`** (`5,242,880` bytes, rechazo `HTTP 413`) y **`60.0 s`** (`AudioDurationExceededError` → `HTTP 422`) antes de iterar los segmentos de CTranslate2. Controla la concurrencia en CPU con `asyncio.Semaphore(ASR_MAX_CONCURRENCY=1)` y espera máxima de `10.0 s` (`HTTP 429`), e implementa cancelación cooperativa mediante `threading.Event` (`cancel_event`) ante desconexiones o *timeouts*.
 * **Métricas acústicas (`ASRMetrics`):** Reporta `transcription`, `detected_language`, `speech_duration_seconds`, `confidence_score`, `word_count`, `words_per_minute`, `avg_logprob`, `no_speech_prob` y, cuando se incluye `expected_transcript`, `wer_score` y `cer_score` calculados con `jiwer`.
 
-### 4.1.3 Subsistema de Recuperación Semántica Aumentada (RAG)
+### 4.1.3 Subsistema de Recuperación Semántica Aumentada (RAG) y Corpus Vectorial
 
-Implementado en `app/services/rag_service.py` y aprovisionado por `app/services/corpus_sync.py`:
+Implementado en `app/services/rag_service.py` y aprovisionado por `app/services/corpus_sync.py` a partir del pipeline de ingeniería de datos (*Data Track*) documentado en `DB_Vectorial/DOCUMENTACION_TECNICA.md`:
 
-* **Base vectorial y embeddings:** Opera sobre `ChromaDB` (`PersistentClient` en `data/technical_corpus_db/chroma.sqlite3`, `~1.08 GB` en disco) con la colección `tech_tutor_corpus`, integrada por **`213,439` fragmentos técnicos** indexados en espacio de distancia coseno (`hnsw:space: cosine`) mediante `SentenceTransformer` (`all-MiniLM-L6-v2`, `384` dimensiones).
-* **Fusión semántica y sanitización:** Construye la consulta mediante `build_search_query()` con el formato `"{escenario_efectivo}: {texto}"` (empleando directamente el texto validado de `custom_scenario` cuando el escenario es personalizado) y limpia etiquetas residuales (`@article@`, `@video@`, `@feed@`) mediante `sanitize_chunk_text()` para optimizar el contexto enviado al LLM.
+* **Construcción y cobertura del corpus documental:** Se recolectaron `27,470` archivos crudos (`164.22 MB`) desde `29` repositorios oficiales en GitHub mediante un crawler recursivo con poda estructural y control de cuota. Tras la sanitización paralela (`ThreadPoolExecutor`, `8` hilos, `137.46 s`), se retuvieron `26,177` archivos de prosa técnica pura (`131.92 MB`, `95.3 %` de retención global), distribuidos en cinco dominios:
+
+| Dominio técnico | Repositorios incluidos (ejemplos principales) | Archivos crudos | Archivos depurados | Retención |
+| :--- | :--- | :---: | :---: | :---: |
+| **IA y Machine Learning** (6) | `pytorch`, `tensorflow`, `transformers`, `keras`, `scikit-learn`, `langchain` | `3,528` | `3,410` | `96.7 %` |
+| **Cloud, DevOps e Infraestructura** (6) | `aws-cli`, `kubernetes`, `docker-ce`, `terraform`, `ansible`, `azure-cli` | `971` | `774` | `79.7 %` |
+| **Backend y Lenguajes** (6) | `fastapi`, `django`, `flask`, `cpython`, `go`, `rust` | `6,042` | `5,826` | `96.4 %` |
+| **Bases de Datos y Big Data** (5) | `spark`, `elasticsearch`, `mongo`, `postgres`, `redis` | `5,899` | `5,493` | `93.1 %` |
+| **Ingeniería, Guías y Carrera** (6) | `developer-roadmap`, `first-contributions`, `tech-interview-handbook`, `coding-interview-university`, `system-design-primer`, `styleguide` | `11,030` | `10,674` | `96.8 %` |
+| **Total global (29 repositorios)** | — | **`27,470`** | **`26,177`** | **`95.3 %`** |
+
+* **Fragmentación, base vectorial y embeddings:** Los documentos depurados se dividieron con `RecursiveCharacterTextSplitter` (`chunk_size = 600`, `chunk_overlap = 60`) y se indexaron en `ChromaDB` (`PersistentClient`, combinando `SQLite` en `chroma.sqlite3` para metadatos/IDs e índice vectorial **HNSW** para búsqueda aproximada de vecinos más cercanos en milisegundos). La colección resultante (`tech_tutor_corpus`) almacena **`213,439` fragmentos técnicos** (`1,032.21 MB` en disco) vectorizados con `SentenceTransformer` (`all-MiniLM-L6-v2`, `384` dimensiones) en espacio de distancia coseno (`hnsw:space: cosine`).
+* **Fusión semántica y sanitización en tiempo de consulta:** El servicio construye la consulta mediante `build_search_query()` con el formato `"{escenario_efectivo}: {texto}"` (empleando directamente el texto validado de `custom_scenario` cuando el escenario es personalizado) y limpia etiquetas residuales (`@article@`, `@video@`, `@feed@`) mediante `sanitize_chunk_text()` para optimizar el contexto enviado al LLM. Asimismo, durante la ingesta inicial se documentaron dos hallazgos técnicos para futuras re-indexaciones: el límite interno de lote de ChromaDB (`5,461` elementos) al procesar archivos extensos como `svnmap.txt` (`8,105` fragmentos) y la conveniencia de construir identificadores basados en la ruta relativa completa en lugar de `file_path.stem` para evitar colisiones entre archivos homónimos (p. ej., `README.md`).
 
 ### 4.1.4 Núcleo evaluativo (`LLM-as-a-Judge`) y determinismo léxico
 

@@ -1,8 +1,10 @@
-# Estructura Maestra de Tesis · Tech Tutor Engine
+# Estructura Maestra de Tesis · `hemi-core` (`v1.0.0`)
 
 **Institución:** Universidad Autónoma de Tlaxcala — Unidad Académica Multidisciplinaria Campus Calpulalpan  
 **Programa:** Licenciatura en Ingeniería en Computación  
-**Título:** Asistente de Inteligencia Artificial Especializado en Inglés Técnico para Ingenieros del Área de Tecnología  
+**Título:** Ingeniería aplicada con arquitectura desacoplada de un motor de inteligencia artificial para diagnosticar inglés técnico en ingeniería de software y nube  
+**Identidad del sistema / agente:** Hemi  
+**Motor de inferencia y diagnóstico:** `hemi-core` (`v1.0.0`)  
 **Autor:** Jesus Leonardo Beltrán Avila  
 **Asesora:** Ing. Luisa Natalia Guerra Cuevas  
 **Fecha objetivo:** Diciembre 2026 (Defensa: Diciembre 2026 – Enero 2027)  
@@ -12,7 +14,7 @@
 
 ## 1. Índice Maestro Corregido (Alineado al Pivote MaaS)
 
-Este índice respeta la estructura oficial de 6 capítulos de `Plantilla(1).docx`, pero sustituye las secciones heredadas del proyecto monolítico anterior (React/Next.js, Hemi, encuestas de usuario, modelo E-R) por el alcance real de **`tech-tutor-engine` v1.0.0** (Motor MaaS desacoplado) e integra el Marco Teórico ya trabajado en `Protocolo_BeltranAvila_JesusLeonardo(1).docx` y `Articulos/`.
+Este índice respeta la estructura oficial de 6 capítulos de `Plantilla(1).docx`, pero sustituye las secciones heredadas del proyecto monolítico anterior (React/Next.js, interfaz visual corporizada de Hemi, encuestas de usuario, modelo E-R) por el alcance real del motor de diagnóstico desacoplado **`hemi-core` (`v1.0.0`)**, núcleo del ecosistema **Hemi**, e integra el Marco Teórico ya trabajado en `Protocolo_BeltranAvila_JesusLeonardo(1).docx` y `Articulos/`.
 
 ```text
 PORTADA, AGRADECIMIENTOS, RESUMEN / ABSTRACT, ÍNDICE GENERAL, ÍNDICE DE FIGURAS Y TABLAS
@@ -57,7 +59,7 @@ CAPÍTULO III. METODOLOGÍA
   3.5 Recursos tecnológicos, de software y de infraestructura
 
 CAPÍTULO IV. RESULTADOS
-  4.1 Implementación del sistema (`tech-tutor-engine` v1.0.0)
+  4.1 Implementación del sistema (`hemi-core v1.0.0`)
       4.1.1 Arquitectura general y flujo multimodal asíncrono (`evaluation_pipeline.py`)
       4.1.2 Subsistema ASR (`faster-whisper large-v3-turbo`, int8, VAD, cancelación cooperativa)
       4.1.3 Subsistema RAG (`ChromaDB`, `all-MiniLM-L6-v2`, sanitización y fusión de escenarios)
@@ -81,7 +83,7 @@ CAPÍTULO VI. CONCLUSIONES
   6.1 Logros alcanzados
   6.2 Cumplimiento de objetivos
   6.3 Aportes a la Ingeniería en Computación
-  6.4 Recomendaciones y Trabajo Futuro (Frontend React/Next.js, agente Hemi, evaluación con usuarios)
+  6.4 Recomendaciones y Trabajo Futuro (Frontend React/Next.js, interfaz visual interactiva de Hemi, TTS en tiempo real, evaluación longitudinal con usuarios)
 
 REFERENCIAS (Formato APA 7.ª edición con DOI/ISSN/URL)
 
@@ -112,6 +114,6 @@ ANEXOS (Actualizados al Motor MaaS)
 | :--- | :--- | :--- |
 | **Cap. I** | `Plantilla(1).docx`, `Antigua_version/Protocolo_BeltranAvila_JesusLeonardo(1).docx`, `Antigua_version/SOLICITUD DE RESTRUCTURACIÓN...docx`, `Articulos/Documento_completo.pdf-PDFA.pdf`, `Documentos_tecnicos/Especificacion_tech_engine(1).md` | Reemplazar referencias a UI React/Next.js por alcance MaaS; verificar referencias completas de IMCO (2024) y ManpowerGroup (2025). |
 | **Cap. II** | `Articulos/6.1.1` a `6.3.3`, `Articulos/IJEH-19-1-178-182.pdf` (Ding 2025), `Articulos/RE1_SIEF-V16N2-June2023-Huang.pdf` (Huang 2023), `Articulos/sustainability-15-12451.pdf` (Kamalov 2023), `Antigua_version/Terminos del aprendizaje.pdf`, `Antigua_version/Protocolo...docx` | Migrar secciones `6.1`–`6.4` del Protocolo, enriquecer con citas directas y páginas de los PDFs, y actualizar menciones tecnológicas al stack final. |
-| **Cap. III y IV** | `Documentos_tecnicos/Especificacion_tech_engine(1).md`, `Documentos_tecnicos/README.md`, `Documentos_tecnicos/GUIA_DESPLIEGUE_PRODUCCION.md`, `Documentos_tecnicos/openapi(1).json` | Usar cifras y nombres de módulos exactos. Integrar resultados reales de `tests/benchmark_thesis.py` cuando estén disponibles. |
-| **Cap. V y VI** | `Documentos_tecnicos/Especificacion_tech_engine(1).md`, `Antigua_version/SOLICITUD DE RESTRUCTURACIÓN...docx`, resultados de Cap. IV | Contrastar métricas obtenidas contra metas (`WER < 12%`, `Recall@3 ≥ 85%`) y documentar React/Next.js + Hemi + pruebas con usuarios como Trabajo Futuro. |
+| **Cap. III y IV** | `Documentos_tecnicos/Especificacion_tech_engine(1).md`, `Documentos_tecnicos/README.md`, `Documentos_tecnicos/GUIA_DESPLIEGUE_PRODUCCION.md`, `Documentos_tecnicos/openapi(1).json`, `DB_Vectorial/DOCUMENTACION_TECNICA.md` | Usar cifras y nombres de módulos exactos, incluyendo el pipeline de construcción del corpus vectorial (29 repositorios, 27,470 crudos → 26,177 depurados → 213,439 fragmentos). Integrar resultados reales de `tests/benchmark_thesis.py` cuando estén disponibles. |
+| **Cap. V y VI** | `Documentos_tecnicos/Especificacion_tech_engine(1).md`, `Antigua_version/SOLICITUD DE RESTRUCTURACIÓN...docx`, resultados de Cap. IV | Contrastar métricas obtenidas contra metas (`WER < 12%`, `Recall@3 ≥ 85%`) y documentar React/Next.js + interfaz visual interactiva de Hemi + pruebas longitudinales con usuarios como Trabajo Futuro (`v1.1.0` / `v2.0.0`). |
 | **Estilo y Citas** | `Normas_Redaccion/Guia-Normas-APA-7ma-edicion.pdf`, `Normas_Redaccion/Conectores_textuales.Nivel. B2...`, `Normas_Redaccion/lista-de-conectores.pdf` | Aplicar APA 7 en toda cita narrativa/parentética y cuidar cohesión académica con conectores formales. |

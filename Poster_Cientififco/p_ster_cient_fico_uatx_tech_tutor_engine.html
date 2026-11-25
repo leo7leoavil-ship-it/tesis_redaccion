@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Póster Científico UATx - Motor de IA para Inglés Técnico</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap');
+
+    :root {
+      --uatx-crimson: #8B0000;
+      --uatx-crimson-dark: #630000;
+      --uatx-gold: #C59B27;
+      --uatx-gold-light: #F7F1DC;
+      --navy-primary: #162E52;
+      --navy-secondary: #24477A;
+      --bg-canvas: #E9EEF5;
+      --card-bg: #FFFFFF;
+      --text-main: #1A202C;
+      --text-muted: #4A5568;
+      --border-subtle: #CBD5E1;
+      --success-bg: #DCFCE7;
+      --success-text: #166534;
+      --pending-bg: #FEF3C7;
+      --pending-text: #92400E;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #1E293B;
+      font-family: 'Inter', Arial, Helvetica, sans-serif;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px;
+    }
+
+    /* Barra de herramientas solo en pantalla */
+    .toolbar {
+      position: sticky;
+      top: 16px;
+      z-index: 1000;
+      background: #0F172A;
+      color: #F8FAFC;
+      padding: 12px 24px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+
+    .toolbar button {
+      background: var(--uatx-gold);
+      color: #111827;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .toolbar select {
+      background: #1E293B;
+      color: #F8FAFC;
+      border: 1px solid #475569;
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+
+    /* Lienzo físico exacto: 90 cm x 120 cm (900mm x 1200mm) */
+    .poster-wrapper {
+      transform-origin: top center;
+      transition: transform 0.2s ease;
+    }
+
+    .poster {
+      width: 900mm;
+      height: 1200mm;
+      background-color: var(--bg-canvas);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 22mm;
+      gap: 16mm;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55);
+      overflow: hidden;
+    }
+
+    /* ================= ENCABEZADO ================= */
+    .poster-header {
+      background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
+      border-top: 8mm solid var(--uatx-crimson);
+      border-bottom: 3.5mm solid var(--uatx-gold);
+      border-radius: 10mm;
+      padding: 16mm 20mm;
+      display: flex;
+      align-items: center;
+      gap: 18mm;
+      box-shadow: 0 4mm 12mm rgba(15, 23, 42, 0.08);
+      flex-shrink: 0;
+    }
+
+    .logo-container {
+      width: 68mm;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-container img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .header-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6mm;
+    }
+
+    .institution-tag {
+      display: inline-block;
+      align-self: flex-start;
+      background-color: var(--uatx-crimson);
+      color: #FFFFFF;
+      font-size: 18pt;
+      font-weight: 700;
+      letter-spacing: 0.8pt;
+      text-transform: uppercase;
+      padding: 3mm 8mm;
+      border-radius: 4mm;
+    }
+
+    .poster-title {
+      font-size: 54pt;
+      font-weight: 800;
+      line-height: 1.15;
+      color: var(--navy-primary);
+      letter-spacing: -0.5pt;
+    }
+
+    .poster-authors {
+      font-size: 27pt;
+      font-weight: 700;
+      color: var(--uatx-crimson-dark);
+      margin-top: 2mm;
+    }
+
+    .poster-affiliation {
+      font-size: 20pt;
+      font-weight: 500;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    /* ================= CUERPO PRINCIPAL (2 COLUMNAS) ================= */
+    .poster-body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16mm;
+      min-height: 0;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      gap: 14mm;
+      height: 100%;
+    }
+
+    /* Tarjetas de sección */
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 9mm;
+      padding: 15mm 18mm;
+      box-shadow: 0 3mm 10mm rgba(15, 23, 42, 0.06);
+      border: 0.6mm solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 8mm;
+    }
+
+    .card-grow {
+      flex: 1;
+      justify-content: space-between;
+    }
+
+    .conclusions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4.5mm;
+    }
+
+    /* Mockup visual de salida JSON / Diagnóstico MCER */
+    .response-mockup {
+      background: #F8FAFC;
+      border: 0.6mm solid #CBD5E1;
+      border-radius: 6mm;
+      padding: 6mm;
+      display: flex;
+      flex-direction: column;
+      gap: 4.5mm;
+    }
+
+    .mockup-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 16pt;
+      font-weight: 700;
+      color: var(--navy-primary);
+    }
+
+    .mockup-endpoint {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14.5pt;
+      background: #E2E8F0;
+      color: var(--navy-primary);
+      padding: 1.5mm 4mm;
+      border-radius: 3mm;
+    }
+
+    .mockup-status {
+      background: var(--success-bg);
+      color: var(--success-text);
+      padding: 1.5mm 4.5mm;
+      border-radius: 999px;
+      font-size: 14pt;
+      font-weight: 800;
+    }
+
+    .mockup-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 5mm;
+      align-items: stretch;
+    }
+
+    .mockup-json {
+      background: #0F172A;
+      color: #E2E8F0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5pt;
+      line-height: 1.45;
+      padding: 5mm 6mm;
+      border-radius: 4.5mm;
+      white-space: pre;
+      overflow: hidden;
+    }
+
+    .json-key { color: #7DD3FC; }
+    .json-str { color: #86EFAC; }
+    .json-num { color: #FCD34D; }
+
+    .mockup-summary {
+      background: #FFFFFF;
+      border: 0.5mm solid #CBD5E1;
+      border-radius: 4.5mm;
+      padding: 5mm 6mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 3.5mm;
+    }
+
+    .mockup-badge-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 0.4mm solid #E2E8F0;
+      padding-bottom: 3mm;
+    }
+
+    .cefr-pill {
+      background: var(--uatx-crimson);
+      color: #FFFFFF;
+      font-size: 20pt;
+      font-weight: 800;
+      padding: 2mm 6mm;
+      border-radius: 4mm;
+    }
+
+    .score-big {
+      font-size: 24pt;
+      font-weight: 800;
+      color: var(--navy-primary);
+    }
+
+    .mockup-meta {
+      font-size: 14.5pt;
+      line-height: 1.4;
+      color: var(--text-main);
+    }
+
+    .term-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2.5mm;
+    }
+
+    .term-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13pt;
+      background: #EFF6FF;
+      color: var(--navy-secondary);
+      border: 0.4mm solid #BFDBFE;
+      padding: 1mm 3.5mm;
+      border-radius: 3mm;
+      font-weight: 600;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1.5mm solid var(--navy-primary);
+      padding-bottom: 4.5mm;
+    }
+
+    .card-title {
+      font-size: 32pt;
+      font-weight: 800;
+      color: var(--navy-primary);
+      display: flex;
+      align-items: center;
+      gap: 5mm;
+    }
+
+    .card-title::before {
+      content: "";
+      display: inline-block;
+      width: 4mm;
+      height: 11mm;
+      background-color: var(--uatx-crimson);
+      border-radius: 2mm;
+    }
+
+    .section-badge {
+      font-size: 15pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8pt;
+      color: var(--uatx-crimson);
+      background-color: #FDF2F2;
+      border: 0.5mm solid #F8B4B4;
+      padding: 2mm 6mm;
+      border-radius: 3mm;
+    }
+
+    /* Tipografía de contenido */
+    p, li {
+      font-size: 21pt;
+      line-height: 1.45;
+      color: var(--text-main);
+      text-align: justify;
+    }
+
+    strong {
+      color: var(--navy-primary);
+      font-weight: 700;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 18.5pt;
+      background-color: #F1F5F9;
+      color: var(--uatx-crimson-dark);
+      padding: 1mm 3mm;
+      border-radius: 2mm;
+      border: 0.3mm solid #CBD5E1;
+    }
+
+    /* Pasos numerados de Metodología */
+    .pipeline-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 6.5mm;
+      margin-top: 2mm;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 6mm;
+      background: #F8FAFC;
+      padding: 5.5mm 7mm;
+      border-radius: 5mm;
+      border-left: 2.5mm solid var(--navy-secondary);
+    }
+
+    .step-num {
+      width: 12mm;
+      height: 12mm;
+      background-color: var(--navy-primary);
+      color: #FFFFFF;
+      font-size: 20pt;
+      font-weight: 800;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1mm;
+    }
+
+    .step-text {
+      font-size: 20pt;
+      line-height: 1.4;
+      text-align: left;
+    }
+
+    /* Contenedores de figuras */
+    .figure-box {
+      background: #F8FAFC;
+      border: 0.6mm solid #CBD5E1;
+      border-radius: 6mm;
+      padding: 6mm;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4mm;
+    }
+
+    .figure-box img,
+    .figure-box svg {
+      width: 100%;
+      height: auto;
+      max-height: 225mm;
+      object-fit: contain;
+      border-radius: 3mm;
+      display: block;
+    }
+
+    .figure-box-hero {
+      flex: 1;
+      justify-content: center;
+    }
+
+    .figure-box-hero svg {
+      max-height: 310mm;
+    }
+
+    .figure-caption {
+      font-size: 17pt;
+      color: var(--text-muted);
+      text-align: center;
+      font-weight: 500;
+    }
+
+    /* Grid de gráficos en Resultados */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8mm;
+    }
+
+    .charts-grid .figure-box img,
+    .charts-grid .figure-box svg {
+      max-height: 125mm;
+    }
+
+    /* Tarjetas KPI destacadas */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7mm;
+    }
+
+    .kpi-card {
+      background: linear-gradient(145deg, var(--navy-primary), var(--navy-secondary));
+      color: #FFFFFF;
+      border-radius: 6mm;
+      padding: 7mm 6mm;
+      text-align: center;
+      border-bottom: 2.5mm solid var(--uatx-gold);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2mm;
+    }
+
+    .kpi-label {
+      font-size: 16pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5pt;
+      color: #CBD5E1;
+    }
+
+    .kpi-value {
+      font-size: 38pt;
+      font-weight: 800;
+      color: #FFFFFF;
+      line-height: 1.1;
+    }
+
+    .kpi-sub {
+      font-size: 15.5pt;
+      color: var(--uatx-gold);
+      font-weight: 600;
+    }
+
+    /* Tabla de Resultados HTML Nativa */
+    .results-table-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4mm;
+    }
+
+    table.results-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 18.5pt;
+      border-radius: 5mm;
+      overflow: hidden;
+      border: 0.5mm solid var(--border-subtle);
+    }
+
+    table.results-table thead {
+      background-color: var(--navy-primary);
+      color: #FFFFFF;
+    }
+
+    table.results-table th {
+      padding: 5.5mm 6mm;
+      text-align: left;
+      font-weight: 700;
+      font-size: 18.5pt;
+    }
+
+    table.results-table td {
+      padding: 5mm 6mm;
+      border-bottom: 0.4mm solid #E2E8F0;
+      vertical-align: middle;
+      line-height: 1.35;
+    }
+
+    table.results-table tbody tr:nth-child(even) {
+      background-color: #F8FAFC;
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 2mm 5mm;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 16.5pt;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .status-ok {
+      background-color: var(--success-bg);
+      color: var(--success-text);
+    }
+
+    .status-pending {
+      background-color: var(--pending-bg);
+      color: var(--pending-text);
+    }
+
+    /* Listas de viñetas (Resultados y Conclusiones) */
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6mm;
+    }
+
+    .bullet-list li {
+      position: relative;
+      padding-left: 11mm;
+      font-size: 20.5pt;
+      line-height: 1.42;
+    }
+
+    .bullet-list li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      top: -1mm;
+      color: var(--uatx-crimson);
+      font-size: 26pt;
+      font-weight: 800;
+    }
+
+    .conclusions-list li::before {
+      content: "✓";
+      font-size: 22pt;
+      top: 0;
+    }
+
+    /* ================= PIE DE PÁGINA ================= */
+    .poster-footer {
+      background-color: #FFFFFF;
+      border-top: 3mm solid var(--navy-primary);
+      border-radius: 8mm;
+      padding: 10mm 16mm;
+      display: grid;
+      grid-template-columns: 2.15fr 1fr;
+      gap: 14mm;
+      box-shadow: 0 3mm 10mm rgba(15, 23, 42, 0.06);
+      flex-shrink: 0;
+    }
+
+    .footer-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .footer-col h3 {
+      font-size: 20pt;
+      font-weight: 800;
+      color: var(--navy-primary);
+      border-bottom: 0.8mm solid var(--uatx-gold);
+      padding-bottom: 2.5mm;
+      margin-bottom: 4mm;
+    }
+
+    .ref-list {
+      list-style: none;
+      padding-left: 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 2.2mm;
+    }
+
+    .ref-list li {
+      font-size: 13pt;
+      line-height: 1.32;
+      color: var(--text-muted);
+      text-align: justify;
+      padding-left: 7mm;
+      text-indent: -7mm;
+    }
+
+    .footer-text {
+      font-size: 16pt;
+      line-height: 1.48;
+      color: var(--text-main);
+      text-align: left;
+      margin: auto 0;
+    }
+
+    .footer-col:last-child .footer-text {
+      text-align: justify;
+    }
+
+    /* ================= REGLAS DE IMPRESIÓN / PDF ================= */
+    @page {
+      size: 900mm 1200mm;
+      margin: 0;
+    }
+
+    @media print {
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      html, body {
+        width: 900mm;
+        height: 1200mm;
+        overflow: hidden;
+        background: none;
+        padding: 0;
+        margin: 0;
+      }
+      .toolbar {
+        display: none !important;
+      }
+      .poster-wrapper {
+        transform: none !important;
+      }
+      .poster {
+        box-shadow: none;
+        margin: 0;
+        width: 900mm;
+        height: 1200mm;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Controles de vista previa (no aparecen al imprimir o exportar PDF) -->
+  <div class="toolbar">
+    <span><strong>Vista previa (90 × 120 cm):</strong></span>
+    <label for="zoomSelect">Zoom:</label>
+    <select id="zoomSelect" onchange="changeZoom(this.value)">
+      <option value="0.22">22% (Pantalla completa)</option>
+      <option value="0.30" selected>30% (Recomendado)</option>
+      <option value="0.45">45% (Detalle)</option>
+      <option value="0.70">70% (Lectura cercana)</option>
+      <option value="1">100% (Tamaño real 90×120 cm)</option>
+    </select>
+    <button onclick="window.print()">Exportar PDF / Imprimir (90×120 cm)</button>
+  </div>
+
+  <div class="poster-wrapper" id="posterWrapper" style="transform: scale(0.30);">
+    <main class="poster">
+
+      <!-- ================= ENCABEZADO ================= -->
+      <header class="poster-header">
+        <div class="logo-container">
+          <!-- Asegúrate de tener image_117a04.png en la misma carpeta -->
+          <img src="escudo_uat.svg" alt="Escudo Universidad Autónoma de Tlaxcala">
+        </div>
+        <div class="header-content">
+          
+          <h1 class="poster-title">
+            Ingeniería aplicada con arquitectura desacoplada de un motor de inteligencia artificial para diagnosticar inglés técnico en ingeniería de software y nube
+          </h1>
+          <span class="institution-tag">Universidad Autónoma de Tlaxcala · Licenciatura en Ingeniería en Computación</span>
+          <div class="poster-authors">
+            Autor: Jesus Leonardo Beltrán Avila | Asesora: Ing. Luisa Natalia Guerra Cuevas
+          </div>
+        </div>
+      </header>
+
+      <!-- ================= CUERPO PRINCIPAL ================= -->
+      <div class="poster-body">
+
+        <!-- COLUMNA IZQUIERDA -->
+        <section class="column">
+
+          <!-- Introducción -->
+          <article class="card">
+            <div class="card-header">
+              <h2 class="card-title">Introducción</h2>
+              <span class="section-badge">Contexto</span>
+            </div>
+            <p>
+              Las plataformas comerciales de idiomas priorizan vocabulario cotidiano y los modelos generativos sin anclaje documental incurren en <strong>alucinaciones terminológicas y aritméticas</strong>. Ante esta brecha, se desarrolló un motor desacoplado (<em>Model-as-a-Service</em>) que integra ASR, recuperación sobre documentación oficial de ingeniería y evaluación bajo el <strong>Marco Común Europeo de Referencia (MCER)</strong>.
+            </p>
+          </article>
+
+          <!-- Objetivo -->
+          <article class="card">
+            <div class="card-header">
+              <h2 class="card-title">Objetivo</h2>
+              <span class="section-badge">Propósito</span>
+            </div>
+            <p>
+              Diseñar, implementar y validar cuantitativamente un motor de inferencia y evaluación técnica asíncrono bajo el paradigma <em>Model-as-a-Service</em> (MaaS), basado en <strong>Reconocimiento Automático de Voz (ASR)</strong>, <strong>Generación Aumentada por Recuperación (RAG)</strong> y <strong>Modelos de Lenguaje de Gran Escala (LLM)</strong>, para diagnosticar y retroalimentar la competencia comunicativa en inglés técnico de ingenieros del área de tecnología bajo rúbricas del <strong>Marco Común Europeo de Referencia (MCER / CEFR)</strong>.
+            </p>
+          </article>
+
+          <!-- Metodología -->
+          <article class="card card-grow">
+            <div class="card-header">
+              <h2 class="card-title">Metodología</h2>
+              <span class="section-badge">Arquitectura Multimodal</span>
+            </div>
+
+            <p>
+              Estudio cuantitativo en dos fases: validación técnica controlada y piloto transversal sobre endpoints REST (<code>/evaluate/voice</code> y <code>/text</code>).
+            </p>
+
+            <div class="pipeline-steps">
+              <div class="step-item">
+                <div class="step-num">1</div>
+                <div class="step-text">
+                  <strong>ASR en memoria:</strong> <code>faster-whisper</code> (<code>large-v3-turbo</code>, CPU <code>int8</code>), VAD, sesgo léxico, límites 5 MB / 60 s y concurrencia serializada.
+                </div>
+              </div>
+
+              <div class="step-item">
+                <div class="step-num">2</div>
+                <div class="step-text">
+                  <strong>RAG vectorial:</strong> ChromaDB (<strong>213,439 fragmentos</strong>, <code>all-MiniLM-L6-v2</code> 384d, coseno) con fusión de escenario y sanitización.
+                </div>
+              </div>
+
+              <div class="step-item">
+                <div class="step-num">3</div>
+                <div class="step-text">
+                  <strong>LLM-as-a-Judge:</strong> <code>openai/gpt-oss-120b</code> (Groq Cloud, JSON estructurado, rúbricas MCER A2–C2) y densidad léxica en Python.
+                </div>
+              </div>
+
+              <div class="step-item">
+                <div class="step-num">4</div>
+                <div class="step-text">
+                  <strong>API y Despliegue:</strong> FastAPI con auth <em>fail-closed</em>, WebSocket, Docker, 72 pruebas (<code>pytest</code>) y <code>benchmark_thesis.py</code>.
+                </div>
+              </div>
+            </div>
+
+            <div class="figure-box figure-box-hero">
+              <svg viewBox="0 0 920 650" role="img" aria-label="Arquitectura del pipeline multimodal asíncrono de tech-tutor-engine" xmlns="http://www.w3.org/2000/svg" style="font-family: 'Inter', Arial, sans-serif;">
+                <defs>
+                  <marker id="arrow-navy" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#162E52"/>
+                  </marker>
+                  <marker id="arrow-crimson" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#8B0000"/>
+                  </marker>
+                  <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#24477A"/>
+                  </marker>
+                </defs>
+
+                <!-- 1. Solicitud Cliente -->
+                <rect x="200" y="10" width="520" height="68" rx="34" fill="#162E52"/>
+                <text x="460" y="38" text-anchor="middle" fill="#FFFFFF" font-size="17.5" font-weight="700">1. Solicitud Cliente (REST o WebSocket)</text>
+                <text x="460" y="61" text-anchor="middle" fill="#E2E8F0" font-size="14" font-weight="500">Token Bearer + Escenario (9 predefinidos / custom)</text>
+                <line x1="460" y1="78" x2="460" y2="104" stroke="#162E52" stroke-width="2.8" marker-end="url(#arrow-navy)"/>
+
+                <!-- Rombo de decisión -->
+                <polygon points="460,108 625,152 460,196 295,152" fill="#FFF5F5" stroke="#8B0000" stroke-width="2.4"/>
+                <text x="460" y="147" text-anchor="middle" fill="#1A202C" font-size="14.5" font-weight="700">¿Auth válida y</text>
+                <text x="460" y="167" text-anchor="middle" fill="#1A202C" font-size="14.5" font-weight="700">modalidad de entrada?</text>
+
+                <!-- Rama izquierda: Rechazo -->
+                <line x1="295" y1="152" x2="232" y2="152" stroke="#8B0000" stroke-width="2.8" marker-end="url(#arrow-crimson)"/>
+                <rect x="16" y="116" width="212" height="72" rx="10" fill="#FFFFFF" stroke="#8B0000" stroke-width="2.4"/>
+                <text x="122" y="146" text-anchor="middle" fill="#8B0000" font-size="16" font-weight="800">Rechazo (Fail-Closed)</text>
+                <text x="122" y="170" text-anchor="middle" fill="#1A202C" font-size="14.5" font-weight="600">HTTP 401 / WS 1008</text>
+
+                <!-- Rama derecha: Entrada Texto -->
+                <line x1="625" y1="152" x2="688" y2="152" stroke="#24477A" stroke-width="2.5" stroke-dasharray="7,4" marker-end="url(#arrow-blue)"/>
+                <rect x="692" y="116" width="212" height="72" rx="10" fill="#FFFFFF" stroke="#64748B" stroke-width="2" stroke-dasharray="6,3"/>
+                <text x="798" y="146" text-anchor="middle" fill="#162E52" font-size="16" font-weight="700">Entrada Texto</text>
+                <text x="798" y="169" text-anchor="middle" fill="#4A5568" font-size="14" font-weight="500">(Omite etapa ASR)</text>
+                <path d="M 798 188 L 798 336" fill="none" stroke="#24477A" stroke-width="2.5" stroke-dasharray="7,4" marker-end="url(#arrow-blue)"/>
+
+                <!-- Rama inferior: Entrada Voz -> ASR -->
+                <line x1="460" y1="196" x2="460" y2="224" stroke="#24477A" stroke-width="2.8" marker-end="url(#arrow-blue)"/>
+                <text x="474" y="215" fill="#162E52" font-size="13.5" font-weight="700">Entrada Voz</text>
+
+                <!-- 2. Subsistema Acústico (ASR) -->
+                <rect x="130" y="228" width="560" height="88" rx="10" fill="#EFF6FF" stroke="#24477A" stroke-width="2.4"/>
+                <text x="410" y="255" text-anchor="middle" fill="#162E52" font-size="16.5" font-weight="800">2. Subsistema Acústico (ASR en Memoria)</text>
+                <text x="410" y="279" text-anchor="middle" fill="#1A202C" font-size="13.8" font-weight="500">Validación (≤ 5 MB, ≤ 60 s) + Semáforo (1, cola 10 s) · faster-whisper large-v3-turbo (int8)</text>
+                <text x="410" y="302" text-anchor="middle" fill="#1D4ED8" font-size="14" font-weight="700">Salida: Transcripción + WPM + Confianza acústica</text>
+                <line x1="410" y1="316" x2="410" y2="336" stroke="#162E52" stroke-width="2.8" marker-end="url(#arrow-navy)"/>
+
+                <!-- 3. Recuperación Semántica (RAG) -->
+                <rect x="60" y="340" width="800" height="88" rx="10" fill="#F0F9FF" stroke="#0284C7" stroke-width="2.4"/>
+                <text x="460" y="367" text-anchor="middle" fill="#162E52" font-size="16.5" font-weight="800">3. Recuperación Semántica (RAG en ChromaDB)</text>
+                <text x="460" y="391" text-anchor="middle" fill="#1A202C" font-size="13.8" font-weight="500">Consulta coseno (all-MiniLM-L6-v2, 384d) sobre 213,439 vectores · Fusión de escenario + sanitización</text>
+                <text x="460" y="414" text-anchor="middle" fill="#0369A1" font-size="14" font-weight="700">Salida: Evidencia técnica verificada (Top-K fragmentos)</text>
+                <line x1="460" y1="428" x2="460" y2="450" stroke="#162E52" stroke-width="2.8" marker-end="url(#arrow-navy)"/>
+
+                <!-- 4. Evaluación Estructurada (LLM-as-a-Judge) -->
+                <rect x="60" y="454" width="800" height="90" rx="10" fill="#FFFFFF" stroke="#162E52" stroke-width="2.4"/>
+                <text x="460" y="481" text-anchor="middle" fill="#162E52" font-size="16.5" font-weight="800">4. Evaluación Estructurada (LLM-as-a-Judge)</text>
+                <text x="460" y="505" text-anchor="middle" fill="#1A202C" font-size="13.8" font-weight="500">Inferencia openai/gpt-oss-120b (Groq Cloud, temp=0.1) · Densidad léxica determinista en Python</text>
+                <text x="460" y="529" text-anchor="middle" fill="#8B0000" font-size="14" font-weight="700">Validación estricta de esquema Pydantic v2 (Rúbrica MCER A2–C2)</text>
+                <line x1="460" y1="544" x2="460" y2="566" stroke="#162E52" stroke-width="2.8" marker-end="url(#arrow-navy)"/>
+
+                <!-- 5. Diagnóstico JSON + Telemetría -->
+                <rect x="120" y="570" width="680" height="68" rx="34" fill="#162E52"/>
+                <text x="460" y="598" text-anchor="middle" fill="#FFFFFF" font-size="17" font-weight="700">5. Diagnóstico JSON + Telemetría</text>
+                <text x="460" y="622" text-anchor="middle" fill="#F7F1DC" font-size="14" font-weight="600">Nivel MCER · Puntajes · Retroalimentación anclada · Tiempos por etapa</text>
+              </svg>
+              <span class="figure-caption"><strong>Figura 1.</strong> Arquitectura del pipeline multimodal asíncrono de <code>tech-tutor-engine</code>.</span>
+            </div>
+          </article>
+
+        </section>
+
+        <!-- COLUMNA DERECHA -->
+        <section class="column">
+
+          <!-- Resultados -->
+          <article class="card card-grow">
+            <div class="card-header">
+              <h2 class="card-title">Resultados Previos</h2>
+              <span class="section-badge">Validación Cuantitativa</span>
+            </div>
+
+            <!-- Tarjetas KPI -->
+            <div class="kpi-row">
+              <div class="kpi-card">
+                <span class="kpi-label">Recall@3 (RAG)</span>
+                <span class="kpi-value">90.0%</span>
+                <span class="kpi-sub">Meta &ge; 85.0%</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-label">Latencia RAG</span>
+                <span class="kpi-value">146.6 ms</span>
+                <span class="kpi-sub">P50: 140.2 ms</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-label">Pruebas Contrato</span>
+                <span class="kpi-value">72 / 72</span>
+                <span class="kpi-sub">100% Aprobadas</span>
+              </div>
+            </div>
+
+            <ul class="bullet-list">
+              <li>
+                <strong>Contratos y seguridad (<code>pytest</code>):</strong> <strong>72/72</strong> pruebas aprobadas (&lt; 2 s sin red), validando auth <em>fail-closed</em> (401), límites (413/422), cola (429), <em>timeouts</em> (504) y densidad léxica.
+              </li>
+              <li>
+                <strong>Recuperación RAG (<em>N</em> = 20):</strong> Superó la meta (&ge; 85%) con <strong>Recall@3 = 90.00%</strong> (18/20), <strong>NDCG@5 = 0.8316</strong> y latencia media de <strong>146.59 ms</strong> (P50: 140.18 ms).
+              </li>
+            </ul>
+
+            <!-- Gráficos comparativos -->
+            <div class="charts-grid">
+              <div class="figure-box">
+                <svg viewBox="0 0 560 340" role="img" aria-label="Métricas de Recuperación Semántica RAG" xmlns="http://www.w3.org/2000/svg" style="font-family: 'Inter', Arial, sans-serif;">
+                  <text x="295" y="24" text-anchor="middle" fill="#1A202C" font-size="17" font-weight="800">Recuperación Semántica (RAG, N = 20)</text>
+                  <!-- Grid lines & Y-axis labels (0% at y=290, 100% at y=50 -> 2.4px per %) -->
+                  <g stroke="#E2E8F0" stroke-width="1">
+                    <line x1="75" y1="50" x2="535" y2="50"/>
+                    <line x1="75" y1="98" x2="535" y2="98"/>
+                    <line x1="75" y1="146" x2="535" y2="146"/>
+                    <line x1="75" y1="194" x2="535" y2="194"/>
+                    <line x1="75" y1="242" x2="535" y2="242"/>
+                  </g>
+                  <line x1="75" y1="50" x2="75" y2="290" stroke="#64748B" stroke-width="1.5"/>
+                  <line x1="75" y1="290" x2="535" y2="290" stroke="#64748B" stroke-width="1.5"/>
+                  <g fill="#4A5568" font-size="12" text-anchor="end" font-weight="600">
+                    <text x="66" y="54">100%</text>
+                    <text x="66" y="102">80%</text>
+                    <text x="66" y="150">60%</text>
+                    <text x="66" y="198">40%</text>
+                    <text x="66" y="246">20%</text>
+                    <text x="66" y="294">0%</text>
+                  </g>
+                  <text x="22" y="170" text-anchor="middle" fill="#1A202C" font-size="13" font-weight="700" transform="rotate(-90 22 170)">Puntuación (% / Escala)</text>
+
+                  <!-- Bars: Recall@3 = 90.0% (h=216, y=74), Recall@5 = 90.0% (h=216, y=74), NDCG@5 = 83.16% (h=199.6, y=90.4) -->
+                  <rect x="115" y="74" width="84" height="216" rx="4" fill="#162E52"/>
+                  <text x="157" y="65" text-anchor="middle" fill="#162E52" font-size="14.5" font-weight="800">90.0%</text>
+                  <text x="157" y="314" text-anchor="middle" fill="#1A202C" font-size="13.5" font-weight="700">Recall@3</text>
+
+                  <rect x="260" y="74" width="84" height="216" rx="4" fill="#24477A"/>
+                  <text x="302" y="65" text-anchor="middle" fill="#24477A" font-size="14.5" font-weight="800">90.0%</text>
+                  <text x="302" y="314" text-anchor="middle" fill="#1A202C" font-size="13.5" font-weight="700">Recall@5</text>
+
+                  <rect x="405" y="90.4" width="84" height="199.6" rx="4" fill="#8B0000"/>
+                  <text x="447" y="81" text-anchor="middle" fill="#8B0000" font-size="14.5" font-weight="800">0.8316</text>
+                  <text x="447" y="314" text-anchor="middle" fill="#1A202C" font-size="13.5" font-weight="700">NDCG@5 (0–1)</text>
+
+                  <!-- Meta Recall@3 >= 85% (y=86) únicamente sobre las métricas Recall -->
+                  <line x1="75" y1="86" x2="375" y2="86" stroke="#C59B27" stroke-width="2.8" stroke-dasharray="7,5"/>
+                  <rect x="378" y="42" width="154" height="24" rx="5" fill="#F7F1DC" stroke="#C59B27" stroke-width="1.2"/>
+                  <text x="455" y="58" text-anchor="middle" fill="#92400E" font-size="11.5" font-weight="700">Meta Recall@3 ≥ 85%</text>
+                </svg>
+                <span class="figure-caption"><strong>Figura 2.</strong> Métricas de recuperación semántica (RAG, <em>N</em> = 20).</span>
+              </div>
+              <div class="figure-box">
+                <svg viewBox="0 0 560 340" role="img" aria-label="Latencia de Búsqueda Vectorial en ChromaDB" xmlns="http://www.w3.org/2000/svg" style="font-family: 'Inter', Arial, sans-serif;">
+                  <text x="295" y="24" text-anchor="middle" fill="#1A202C" font-size="17" font-weight="800">Latencia Vectorial ChromaDB (213,439 vect.)</text>
+                  <!-- X scale: 0 ms at x=130, 180 ms at x=520 -> 2.1667 px per ms -->
+                  <g stroke="#E2E8F0" stroke-width="1">
+                    <line x1="216.7" y1="52" x2="216.7" y2="275"/>
+                    <line x1="303.3" y1="52" x2="303.3" y2="275"/>
+                    <line x1="390.0" y1="52" x2="390.0" y2="275"/>
+                    <line x1="476.7" y1="52" x2="476.7" y2="275"/>
+                    <line x1="520.0" y1="52" x2="520.0" y2="275"/>
+                  </g>
+                  <line x1="130" y1="52" x2="130" y2="275" stroke="#64748B" stroke-width="1.5"/>
+                  <line x1="130" y1="275" x2="520" y2="275" stroke="#64748B" stroke-width="1.5"/>
+
+                  <g fill="#4A5568" font-size="12" text-anchor="middle" font-weight="600">
+                    <text x="130" y="295">0</text>
+                    <text x="216.7" y="295">40</text>
+                    <text x="303.3" y="295">80</text>
+                    <text x="390.0" y="295">120</text>
+                    <text x="476.7" y="295">160</text>
+                    <text x="520.0" y="295">180</text>
+                  </g>
+                  <text x="325" y="320" text-anchor="middle" fill="#1A202C" font-size="13" font-weight="700">Latencia (ms)</text>
+
+                  <!-- P95 = 162.62 ms -> w = 352.3 -->
+                  <text x="120" y="96" text-anchor="end" fill="#1A202C" font-size="13.5" font-weight="700">Percentil 95</text>
+                  <rect x="130" y="70" width="352.3" height="44" rx="4" fill="#8B0000"/>
+                  <text x="472" y="97" text-anchor="end" fill="#FFFFFF" font-size="14" font-weight="800">162.6 ms</text>
+
+                  <!-- Media = 146.59 ms -> w = 317.6 -->
+                  <text x="120" y="168" text-anchor="end" fill="#1A202C" font-size="13.5" font-weight="700">Media</text>
+                  <rect x="130" y="142" width="317.6" height="44" rx="4" fill="#24477A"/>
+                  <text x="437" y="169" text-anchor="end" fill="#FFFFFF" font-size="14" font-weight="800">146.6 ms</text>
+
+                  <!-- P50 = 140.18 ms -> w = 303.7 -->
+                  <text x="120" y="240" text-anchor="end" fill="#1A202C" font-size="13.5" font-weight="700">Mediana (P50)</text>
+                  <rect x="130" y="214" width="303.7" height="44" rx="4" fill="#162E52"/>
+                  <text x="423" y="241" text-anchor="end" fill="#FFFFFF" font-size="14" font-weight="800">140.2 ms</text>
+                </svg>
+                <span class="figure-caption"><strong>Figura 3.</strong> Latencia de búsqueda vectorial en ChromaDB (213,439 vectores).</span>
+              </div>
+            </div>
+
+            <!-- Tabla 1 como elemento gráfico vectorial -->
+            <div class="figure-box">
+              <svg viewBox="0 0 920 314" role="img" aria-label="Tabla 1. Indicadores de validación técnica y recuperación documental" xmlns="http://www.w3.org/2000/svg" style="font-family: 'Inter', Arial, sans-serif;">
+                <rect x="2" y="2" width="916" height="310" rx="10" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+                <!-- Header -->
+                <path d="M 2 12 Q 2 2 12 2 L 908 2 Q 918 2 918 12 L 918 48 L 2 48 Z" fill="#162E52"/>
+                <g fill="#FFFFFF" font-size="14.5" font-weight="700">
+                  <text x="20" y="30">Indicador evaluado</text>
+                  <text x="430" y="30">Resultado obtenido</text>
+                  <text x="645" y="30">Meta / Ref.</text>
+                  <text x="840" y="30" text-anchor="middle">Estado</text>
+                </g>
+
+                <!-- Row 1 -->
+                <rect x="3" y="48" width="914" height="52" fill="#FFFFFF"/>
+                <text x="20" y="79" fill="#1A202C" font-size="14" font-weight="500">Suite de pruebas de integración y contrato</text>
+                <text x="430" y="79" fill="#162E52" font-size="14" font-weight="800">72 / 72 (100%)</text>
+                <text x="645" y="79" fill="#4A5568" font-size="14" font-weight="500">100% aprobadas</text>
+                <rect x="786" y="60" width="108" height="28" rx="14" fill="#DCFCE7"/>
+                <text x="840" y="79" text-anchor="middle" fill="#166534" font-size="13" font-weight="700">Cumplido</text>
+                <line x1="2" y1="100" x2="918" y2="100" stroke="#E2E8F0" stroke-width="1.2"/>
+
+                <!-- Row 2 -->
+                <rect x="3" y="100" width="914" height="52" fill="#F8FAFC"/>
+                <text x="20" y="131" fill="#1A202C" font-size="14" font-weight="500">Precisión de recuperación semántica (Recall@3)</text>
+                <text x="430" y="131" fill="#162E52" font-size="14" font-weight="800">90.00%</text>
+                <text x="645" y="131" fill="#4A5568" font-size="14" font-weight="500">≥ 85.00%</text>
+                <rect x="786" y="112" width="108" height="28" rx="14" fill="#DCFCE7"/>
+                <text x="840" y="131" text-anchor="middle" fill="#166534" font-size="13" font-weight="700">Cumplido</text>
+                <line x1="2" y1="152" x2="918" y2="152" stroke="#E2E8F0" stroke-width="1.2"/>
+
+                <!-- Row 3 -->
+                <rect x="3" y="152" width="914" height="52" fill="#FFFFFF"/>
+                <text x="20" y="183" fill="#1A202C" font-size="14" font-weight="500">Calidad de ordenamiento (NDCG@5)</text>
+                <text x="430" y="183" fill="#162E52" font-size="14" font-weight="800">0.8316</text>
+                <text x="645" y="183" fill="#4A5568" font-size="14" font-weight="500">Escala 0–1</text>
+                <rect x="786" y="164" width="108" height="28" rx="14" fill="#DCFCE7"/>
+                <text x="840" y="183" text-anchor="middle" fill="#166534" font-size="13" font-weight="700">Cumplido</text>
+                <line x1="2" y1="204" x2="918" y2="204" stroke="#E2E8F0" stroke-width="1.2"/>
+
+                <!-- Row 4 -->
+                <rect x="3" y="204" width="914" height="52" fill="#F8FAFC"/>
+                <text x="20" y="235" fill="#1A202C" font-size="14" font-weight="500">Latencia vectorial (search_latency_ms)</text>
+                <text x="430" y="235" fill="#162E52" font-size="14" font-weight="800">146.59 ms (P50: 140.2 ms)</text>
+                <text x="645" y="235" fill="#4A5568" font-size="14" font-weight="500">&lt; 2.5 s (Tiempo real)</text>
+                <rect x="786" y="216" width="108" height="28" rx="14" fill="#DCFCE7"/>
+                <text x="840" y="235" text-anchor="middle" fill="#166534" font-size="13" font-weight="700">Cumplido</text>
+                <line x1="2" y1="256" x2="918" y2="256" stroke="#E2E8F0" stroke-width="1.2"/>
+
+                <!-- Row 5 -->
+                <path d="M 3 256 L 917 256 L 917 302 Q 917 311 908 311 L 12 311 Q 3 311 3 302 Z" fill="#FFFFFF"/>
+                <text x="20" y="288" fill="#1A202C" font-size="14" font-weight="500">Exactitud fonética (WER) y latencia audio</text>
+                <text x="430" y="288" fill="#4A5568" font-size="14" font-weight="500">[Pendiente benchmark audio]</text>
+                <text x="645" y="288" fill="#4A5568" font-size="14" font-weight="500">WER &lt; 12%</text>
+                <rect x="786" y="269" width="108" height="28" rx="14" fill="#FEF3C7"/>
+                <text x="840" y="288" text-anchor="middle" fill="#92400E" font-size="13" font-weight="700">Por ejecutar</text>
+              </svg>
+              <span class="figure-caption"><strong>Tabla 1.</strong> Indicadores de validación técnica y recuperación documental.</span>
+            </div>
+
+            <!-- Ejemplo visual de salida estructurada -->
+            <div class="response-mockup">
+              <div class="mockup-bar">
+                <span>Ejemplo de Evaluación de Texto (Salida API)</span>
+                <div style="display: flex; gap: 3mm; align-items: center;">
+                  <span class="mockup-endpoint">POST /api/v1/evaluate/text</span>
+                  <span class="mockup-status">200 OK</span>
+                </div>
+              </div>
+              <div class="mockup-grid">
+                <div class="mockup-json"><span class="json-key">"cefr_level"</span>: <span class="json-str">"B2"</span>, <span class="json-key">"overall_score"</span>: <span class="json-num">84</span>,
+<span class="json-key">"grammar_accuracy_score"</span>: <span class="json-num">82</span>, <span class="json-key">"technical_precision_score"</span>: <span class="json-num">88</span>,
+<span class="json-key">"lexical_density_ratio"</span>: <span class="json-num">0.26</span>, <span class="json-key">"search_latency_ms"</span>: <span class="json-num">146.59</span>,
+<span class="json-key">"detected_technical_terms"</span>: [
+  <span class="json-str">"horizontal scaling"</span>, <span class="json-str">"database sharding"</span>, <span class="json-str">"consistent hashing"</span>
+],
+<span class="json-key">"feedback_details"</span>: [{
+  <span class="json-key">"category"</span>: <span class="json-str">"architectural_alignment"</span>,
+  <span class="json-key">"rag_source_context"</span>: <span class="json-str">"mongo/.../README_sharding_catalog.md"</span>
+}]</div>
+                <div class="mockup-summary">
+                  <div class="mockup-badge-row">
+                    <span class="cefr-pill">MCER: B2</span>
+                    <span class="score-big">84 / 100</span>
+                  </div>
+                  <div class="mockup-meta">
+                    <strong>Precisión técnica:</strong> 88/100 · <strong>Gramática:</strong> 82/100<br>
+                    <strong>Densidad léxica:</strong> <code>0.26</code> · <strong>RAG:</strong> <code>146.59 ms</code>
+                  </div>
+                  <div>
+                    <div class="mockup-meta" style="margin-bottom: 2mm;"><strong>Términos detectados:</strong></div>
+                    <div class="term-chips">
+                      <span class="term-chip">horizontal scaling</span>
+                      <span class="term-chip">database sharding</span>
+                      <span class="term-chip">consistent hashing</span>
+                    </div>
+                  </div>
+                  <div class="mockup-meta" style="color: var(--text-muted); font-size: 13pt;">
+                    <strong>Fuente Top-1 RAG:</strong> <code>README_sharding_catalog.md</code>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Conclusiones -->
+          <article class="card">
+            <div class="card-header">
+              <h2 class="card-title">Conclusiones</h2>
+              <span class="section-badge">Aportes y Proyección</span>
+            </div>
+            <ul class="bullet-list conclusions-list">
+              <li>
+                La arquitectura <em>Model-as-a-Service</em> es viable y estable para evaluar inglés técnico mediante una API contenerizada.
+              </li>
+              <li>
+                El corpus vectorial de <strong>213,439 fragmentos</strong> logra <strong>90.00% de Recall@3 en 146.59 ms</strong>, mitigando alucinaciones terminológicas.
+              </li>
+              <li>
+                Calcular la densidad léxica en Python elimina errores aritméticos en la evaluación automatizada.
+              </li>
+              <li>
+                <strong>Limitaciones y futuro:</strong> Pendiente medir WER en audio de referencia y piloto en endpoints (10–15 participantes); cliente React/Next.js como trabajo futuro.
+              </li>
+            </ul>
+          </article>
+
+        </section>
+      </div>
+
+      <!-- ================= FRANJA INFERIOR ================= -->
+      <footer class="poster-footer">
+        <div class="footer-col">
+          <h3>Referencias</h3>
+          <ul class="ref-list">
+            <li>Bashori, M., van Hout, R., Strik, H., &amp; Cucchiarini, C. (2024). <em>I Can Speak</em>: Improving English pronunciation through automatic speech recognition-based language learning systems. <em>Innovation in Language Learning and Teaching</em>, <em>18</em>(5), 443–461. https://doi.org/10.1080/17501229.2024.2315101</li>
+            <li>Huang, L. (2023). Ethics of artificial intelligence in education: Student privacy and data protection. <em>Science Insights Education Frontiers</em>, <em>16</em>(2), 2577–2587. https://doi.org/10.15354/sief.23.re202</li>
+            <li>Kamalov, F., Santandreu Calonge, D., &amp; Gurrib, I. (2023). New era of artificial intelligence in education: Towards a sustainable multifaceted revolution. <em>Sustainability</em>, <em>15</em>(16), 12451. https://doi.org/10.3390/su151612451</li>
+            <li>Mannekote, A., Davies, A., Pinto, J. D., Zhang, S., Olds, D., Schroeder, N. L., Lehman, B., Zapata-Rivera, D., &amp; Zhai, C. (2024). Large language models for whole-learner support: Opportunities and challenges. <em>Frontiers in Artificial Intelligence</em>, <em>7</em>, 1460364. https://doi.org/10.3389/frai.2024.1460364</li>
+            <li>Zhang, L., Zhao, Z., Ma, C., Shan, L., Sun, H., Jiang, L., Deng, S., &amp; Gao, C. (2020). End-to-end automatic pronunciation error detection based on improved hybrid CTC/attention architecture. <em>Sensors</em>, <em>20</em>(7), 1809. https://doi.org/10.3390/s20071809</li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h3>Agradecimientos</h3>
+          <p class="footer-text">
+            Agrazco al equipo docente y técnico por su orientación metodológica, así como a las comunidades de software libre y documentación abierta cuyos recursos hicieron posible el desarrollo y las pruebas del sistema.
+          </p>
+        </div>
+      </footer>
+
+    </main>
+  </div>
+
+  <script>
+    function changeZoom(scale) {
+      const wrapper = document.getElementById('posterWrapper');
+      wrapper.style.transform = `scale(${scale})`;
+    }
+  </script>
+</body>
+</html>

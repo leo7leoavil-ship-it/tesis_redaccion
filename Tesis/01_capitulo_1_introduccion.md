@@ -1,6 +1,6 @@
 # CAPÍTULO I. INTRODUCCIÓN
 
-> **Estado del documento:** Borrador alineado al pivote arquitectónico **Motor MaaS (`tech-tutor-engine` v1.0.0)** y a `Plantilla(1).docx`.  
+> **Estado del documento:** Borrador alineado al pivote arquitectónico **Motor MaaS (`hemi-core` `v1.0.0`)** y a `Plantilla(1).docx`.  
 > **Pendientes marcados:** `[Verificar referencia completa APA 7]` en citas heredadas del protocolo (`IMCO, 2024`; `ManpowerGroup, 2025`).
 
 ---
@@ -14,7 +14,7 @@ Por otra parte, las plataformas comerciales disponibles para el aprendizaje de i
 1. **Riesgo de alucinación terminológica y evaluativa:** al carecer de un mecanismo de recuperación sobre documentación técnica verificada, los modelos generativos pueden producir retroalimentación imprecisa o incoherente frente a estándares reales de ingeniería, además de incurrir en errores aritméticos al calcular métricas cuantitativas como la densidad léxica.
 2. **Falta de evaluación multimodal integrada y reproducible:** los sistemas conversacionales convencionales no combinan, en un flujo asíncrono y auditable, el reconocimiento automático de voz (ASR) optimizado para jerga técnica con rúbricas estandarizadas del Marco Común Europeo de Referencia para las Lenguas (MCER / CEFR) y métricas objetivas de desempeño fonético y léxico.
 
-En consecuencia, surge el problema técnico de diseñar e implementar un motor de inferencia y evaluación desacoplado (*Model-as-a-Service*, MaaS) capaz de procesar audio y texto técnico en tiempo acotado, anclar la evaluación en un corpus especializado de ingeniería mediante Generación Aumentada por Recuperación (RAG) y emitir diagnósticos deterministas y reproducibles a través de interfaces API estandarizadas.
+En consecuencia, surge el problema técnico de diseñar e implementar el motor de diagnóstico desacoplado **`hemi-core` (`v1.0.0`)**, núcleo del ecosistema **Hemi**, bajo un enfoque *Model-as-a-Service* (MaaS) capaz de procesar audio y texto técnico en tiempo acotado, anclar la evaluación en un corpus especializado de ingeniería de software y nube mediante Generación Aumentada por Recuperación (RAG) y emitir diagnósticos deterministas y reproducibles a través de interfaces API estandarizadas.
 
 ---
 
@@ -30,7 +30,7 @@ Desde el punto de vista **técnico y metodológico**, el proyecto aporta una arq
 
 ## 1.3 Objetivo general
 
-Diseñar, implementar y validar cuantitativamente un motor de inferencia y evaluación técnica asíncrono bajo el paradigma *Model-as-a-Service* (MaaS), basado en Reconocimiento Automático de Voz (ASR), Generación Aumentada por Recuperación (RAG) y Modelos de Lenguaje de Gran Escala (LLM), para diagnosticar y retroalimentar la competencia comunicativa en inglés técnico de ingenieros del área de tecnología bajo rúbricas del Marco Común Europeo de Referencia (MCER / CEFR).
+Diseñar, implementar y validar cuantitativamente el motor de inferencia y diagnóstico técnico desacoplado **`hemi-core` (`v1.0.0`)** bajo el paradigma *Model-as-a-Service* (MaaS), basado en Reconocimiento Automático de Voz (ASR), Generación Aumentada por Recuperación (RAG) y Modelos de Lenguaje de Gran Escala (LLM), para diagnosticar y retroalimentar la competencia comunicativa en inglés técnico en ingeniería de software y nube bajo rúbricas del Marco Común Europeo de Referencia (MCER / CEFR).
 
 ---
 
@@ -49,7 +49,7 @@ La implementación de un motor de evaluación multimodal asíncrono que integra 
 
 ### Variables de investigación
 
-* **Variable independiente:** Arquitectura del motor MaaS (`tech-tutor-engine`) compuesta por el pipeline multimodal `ASR → RAG → LLM-as-a-Judge` con corpus técnico vectorizado y esquemas estrictos de salida.
+* **Variable independiente:** Arquitectura del motor MaaS (`hemi-core` `v1.0.0`) compuesta por el pipeline multimodal `ASR → RAG → LLM-as-a-Judge` con corpus técnico vectorizado y esquemas estrictos de salida.
 * **Variables dependientes:**
   * *Exactitud fonética de transcripción técnica:* medida a través de la Tasa de Error de Palabra ($\text{WER}$) y Tasa de Error de Caracteres ($\text{CER}$).
   * *Pertinencia de recuperación semántica:* medida mediante $\text{Recall@k}$ sobre consultas técnicas de ingeniería.
@@ -68,7 +68,7 @@ La implementación de un motor de evaluación multimodal asíncrono que integra 
 
 ### Limitaciones
 
-* **Exclusión de plataforma frontend monolítica (Trabajo Futuro):** Conforme al ajuste formal de alcance realizado en septiembre de 2026, el desarrollo de una aplicación cliente completa en React/Next.js, la gestión de cuentas de usuario con OAuth 2.0, los tableros gráficos de progreso y la interfaz agéntica visual (*Hemi*) quedan explícitamente delimitados como **Trabajo Futuro**, priorizando el rigor del núcleo de inferencia y evaluación.
+* **Exclusión de plataforma frontend monolítica e interfaz visual de Hemi (Trabajo Futuro):** Conforme al ajuste formal de alcance realizado en septiembre de 2026, mientras `hemi-core` (`v1.0.0`) consolida el núcleo funcional desacoplado del ecosistema **Hemi**, el desarrollo de una aplicación cliente completa en React/Next.js, la gestión de cuentas de usuario con OAuth 2.0, los tableros gráficos de progreso, la síntesis de voz (TTS) en tiempo real y el acoplamiento con la interfaz visual animada de **Hemi** quedan explícitamente delimitados como **Trabajo Futuro** (`v1.1.0`, `v2.0.0`), priorizando el rigor del núcleo de inferencia y diagnóstico.
 * **Dependencia de proveedor externo para inferencia LLM:** Aunque los subsistemas ASR y RAG se ejecutan localmente en memoria, la etapa de razonamiento evaluativo depende de la conectividad y disponibilidad de la API externa de Groq Cloud (`openai/gpt-oss-120b`), aplicando una política estricta de fallos (`HTTP 502` / `504`) sin generación de puntajes simulados ante desconexiones.
 * **Restricciones de hardware y concurrencia en CPU:** La configuración base de inferencia ASR en CPU (`int8`, `beam_size=1`) serializa las peticiones mediante un semáforo de concurrencia (`ASR_MAX_CONCURRENCY=1`) y acota las entradas a un máximo de `5 MB` y `60 segundos` de audio para preservar la estabilidad de memoria del servidor (`~3.5–4.5 GB` de RAM).
 * **Validación técnica controlada y estudio piloto transversal:** La evaluación empírica de esta tesis combina la verificación cuantitativa automatizada del motor (suite de 72 pruebas, `WER`, `Recall@k` y latencia) con un estudio piloto transversal ejecutado directamente contra los endpoints expuestos del servicio (utilizando la consola `/ui` únicamente con fines demostrativos). La medición del impacto pedagógico longitudinal (pre-test / post-test a largo plazo) en cohortes de estudiantes queda delimitada como línea de investigación posterior.
